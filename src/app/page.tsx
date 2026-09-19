@@ -1,33 +1,30 @@
 import { Hero } from "@/components/sections/Hero";
+import { Situations } from "@/components/sections/Situations";
 import { Story } from "@/components/sections/Story";
-import { Brain } from "@/components/sections/Brain";
+import { Patterns } from "@/components/sections/Patterns";
 import { Services } from "@/components/sections/Services";
-import { Companion } from "@/components/sections/Companion";
-import { Gallery } from "@/components/sections/Gallery";
-import { Journey } from "@/components/sections/Journey";
-import { Testimonials } from "@/components/sections/Testimonials";
-import { Contact } from "@/components/sections/Contact";
+import { Process } from "@/components/sections/Process";
+import { Trust } from "@/components/sections/Trust";
+import { FinalCta } from "@/components/sections/FinalCta";
 import { JsonLd } from "@/components/seo/JsonLd";
 
 /**
- * Jedna stránka = jedna cesta:
- * HERO → CHAOS (ztráta) → UNDERSTANDING (příběh, mozek) → CHANGE (služby)
- * → SUPPORT (doprovázení) → NEW CONNECTIONS (momenty, cesta) → STABILITY
- * (důvěra) → NEW BEGINNING (kontakt)
+ * Jedna stránka, jedna cesta:
+ * ZASTAVÍ (hero) → POZNÁ SE (situace) → ZAUJME (příběh, vzorce)
+ * → ZAČNE DŮVĚŘOVAT (pomoc, průběh, důvěra) → NAPÍŠE (finální CTA).
  */
 export default function HomePage() {
   return (
     <>
       <JsonLd />
       <Hero />
+      <Situations />
       <Story />
-      <Brain />
+      <Patterns />
       <Services />
-      <Companion />
-      <Gallery />
-      <Journey />
-      <Testimonials />
-      <Contact />
+      <Process />
+      <Trust />
+      <FinalCta />
     </>
   );
 }

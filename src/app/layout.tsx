@@ -3,10 +3,9 @@ import { Newsreader, Manrope } from "next/font/google";
 import { site } from "@/config/site";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
 import { NeuralBackground } from "@/components/neural/NeuralBackground";
-import { Preloader } from "@/components/ui/Preloader";
-import { Cursor } from "@/components/ui/Cursor";
 import { Nav } from "@/components/layout/Nav";
 import { Footer } from "@/components/layout/Footer";
+import { StickyCta } from "@/components/layout/StickyCta";
 import "./globals.css";
 
 const newsreader = Newsreader({
@@ -61,19 +60,15 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#08080a",
-  colorScheme: "dark",
+  themeColor: "#fdfbf7",
+  colorScheme: "light",
   width: "device-width",
   initialScale: 1,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html
-      lang={site.language}
-      className={`${newsreader.variable} ${manrope.variable}`}
-      suppressHydrationWarning
-    >
+    <html lang={site.language} className={`${newsreader.variable} ${manrope.variable}`} suppressHydrationWarning>
       <head>
         <script
           // Označí dokument jako JS-enabled ještě před prvním vykreslením,
@@ -84,20 +79,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-svh">
         <a
           href="#main"
-          className="sr-only z-[110] rounded-full bg-gold-400 px-5 py-3 text-ink-950 focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
+          className="sr-only z-[110] rounded-full bg-ink-900 px-5 py-3 text-paper-50 focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
         >
           Přeskočit na obsah
         </a>
         <SmoothScroll>
-          <Preloader />
           <NeuralBackground />
-          <Cursor />
-          <div className="grain" aria-hidden="true" />
           <Nav />
           <main id="main" className="relative z-10">
             {children}
           </main>
           <Footer />
+          <StickyCta />
         </SmoothScroll>
       </body>
     </html>
