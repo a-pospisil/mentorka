@@ -5,7 +5,7 @@ import { useRef } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { prefersReducedMotionNow } from "@/lib/hooks";
 import { contactHref, site } from "@/config/site";
-import { portrait } from "@/content/photos";
+import { heroPortrait } from "@/content/photos";
 import { HeroNeural } from "@/components/neural/HeroNeural";
 import { TextReveal } from "@/components/ui/TextReveal";
 import { MagneticButton } from "@/components/ui/MagneticButton";
@@ -77,17 +77,17 @@ export function Hero() {
         <div className="hero-photo relative h-full w-full will-change-transform">
           <div className="hero-photo-inner relative h-full w-full">
             <Image
-              src={portrait}
+              src={heroPortrait}
               alt={`${site.name} – portrét`}
               fill
               priority
               sizes="100vw"
               placeholder="blur"
-              className="object-cover object-[50%_18%] saturate-[0.9] contrast-[1.03]"
+              className="object-cover object-[50%_22%] saturate-[0.9] contrast-[1.02]"
             />
           </div>
-          <div className="absolute inset-0 bg-gradient-to-b from-ink-950/70 via-transparent to-ink-950" />
-          <div className="absolute inset-0 bg-gradient-to-t from-ink-950 via-ink-950/45 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-b from-ink-950/45 via-transparent to-ink-950" />
+          <div className="absolute inset-0 bg-gradient-to-t from-ink-950 via-ink-950/35 to-transparent" />
         </div>
         <HeroNeural className="inset-0" />
       </div>
@@ -132,21 +132,19 @@ export function Hero() {
                 aria-hidden="true"
                 className="hero-frame pointer-events-none absolute -inset-4 border hairline-strong"
               />
-              <div className="hero-photo relative h-full w-full overflow-hidden will-change-transform">
+              <div className="hero-photo mask-vignette relative h-full w-full overflow-hidden will-change-transform">
                 <div className="hero-photo-inner relative h-[115%] w-full -translate-y-[7%]">
                   <Image
-                    src={portrait}
+                    src={heroPortrait}
                     alt={`${site.name} – portrét`}
                     fill
                     priority
                     sizes="(min-width: 1280px) 520px, (min-width: 1024px) 40vw, 100vw"
                     placeholder="blur"
-                    className="object-cover object-[50%_30%] saturate-[0.88] contrast-[1.03]"
+                    className="object-cover object-[50%_28%] saturate-[0.9] contrast-[1.02]"
                   />
                 </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-ink-950 via-ink-950/10 to-transparent" />
-                <div className="absolute inset-0 bg-gradient-to-r from-ink-950/50 via-transparent to-transparent" />
-                <div className="absolute inset-0 bg-gradient-to-b from-ink-950/35 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-ink-950 via-transparent to-transparent opacity-80" />
               </div>
               <p className="hero-meta t-label absolute -bottom-9 right-0 text-bone-600">
                 {site.name}

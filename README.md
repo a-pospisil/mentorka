@@ -57,7 +57,8 @@ Hodnoty začínající `TODO: DOPLNIT` se na webu zobrazují jako zřetelně ozn
    (`ratio`, `treatment` = `color | mono | warm`, `position`).
 3. Placeholder položky (`placeholder: true`) odstraňte.
 
-Hero portrét a fotografie ze silnice jsou exportovány z téhož souboru (`portrait`, `road`).
+Fotografie použité mimo galerii jsou pojmenované exporty v témže souboru: `heroPortrait` (hero),
+`storyPortrait` (sticky portrét v příběhu, který se s kapitolami vrací do barev), `contactPortrait` (kontakt) a `road` (odhalení na konci příběhu).
 
 ### Přidání referencí
 

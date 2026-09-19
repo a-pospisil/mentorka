@@ -1,4 +1,6 @@
+import Image from "next/image";
 import { contactHref, isTodo, site, telHref } from "@/config/site";
+import { contactPortrait } from "@/content/photos";
 import { contactContent } from "@/content/contact";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
@@ -33,6 +35,19 @@ export function Contact() {
           </div>
 
           <Reveal className="flex flex-col justify-end lg:col-span-4 lg:col-start-9" delay={0.2}>
+            <div className="relative mb-12 w-32 sm:w-36">
+              <div aria-hidden="true" className="absolute -inset-3 border hairline-strong" />
+              <div className="relative aspect-[4/5] overflow-hidden">
+                <Image
+                  src={contactPortrait}
+                  alt={`${site.name} – portrét`}
+                  fill
+                  sizes="144px"
+                  placeholder="blur"
+                  className="object-cover object-[50%_16%] grayscale contrast-[1.08] brightness-[0.92]"
+                />
+              </div>
+            </div>
             <dl className="flex flex-col divide-y hairline border-y hairline">
               <div className="flex flex-col gap-2 py-6">
                 <dt className="t-label text-bone-500">E-mail</dt>

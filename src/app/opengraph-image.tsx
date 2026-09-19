@@ -32,7 +32,7 @@ export default async function OpenGraphImage() {
   const [serif, sans, photo] = await Promise.all([
     loadFont("Newsreader", 300, HEADLINE + site.name),
     loadFont("Manrope", 500, SUB),
-    readFile(join(process.cwd(), "src/assets/images/vladislava-portrait.jpg")),
+    readFile(join(process.cwd(), "src/assets/images/vladislava-dark.jpg")),
   ]);
   const photoSrc = `data:image/jpeg;base64,${photo.toString("base64")}`;
 
@@ -71,7 +71,7 @@ export default async function OpenGraphImage() {
             alt=""
             width={480}
             height={720}
-            style={{ objectFit: "cover", objectPosition: "50% 25%", filter: "saturate(0.85)" }}
+            style={{ objectFit: "cover", objectPosition: "50% 20%", filter: "saturate(0.9)" }}
           />
           <div
             style={{

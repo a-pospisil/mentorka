@@ -5,7 +5,7 @@ import { useRef, useState } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { prefersReducedMotionNow } from "@/lib/hooks";
 import { storyChapters, storyIntro, storyOutro } from "@/content/story";
-import { road } from "@/content/photos";
+import { road, storyPortrait } from "@/content/photos";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 import { TextReveal } from "@/components/ui/TextReveal";
@@ -19,6 +19,7 @@ import { cn } from "@/lib/utils";
 export function Story() {
   const ref = useRef<HTMLElement>(null);
   const [active, setActive] = useState(0);
+  const storyProgress = storyChapters.length > 1 ? active / (storyChapters.length - 1) : 1;
 
   useGSAP(
     () => {
@@ -77,9 +78,28 @@ export function Story() {
       </div>
 
       <div className="page-container grid gap-10 pb-24 lg:grid-cols-12 lg:pb-40">
-        {/* Levý sloupec – neuronová osa kapitol (sticky) */}
+        {/* Levý sloupec – portrét a neuronová osa kapitol (sticky) */}
         <aside className="hidden lg:col-span-4 lg:block">
-          <ol className="sticky top-[30vh] flex flex-col" aria-label="Kapitoly příběhu">
+          <div className="sticky top-[10vh] flex flex-col gap-10">
+            {/* Portrét se s příběhem vrací z šedi do barev */}
+            <div className="relative w-40 xl:w-44">
+              <div aria-hidden="true" className="absolute -inset-3 border hairline" />
+              <div className="relative aspect-[4/5] overflow-hidden">
+                <Image
+                  src={storyPortrait}
+                  alt="Vladislava Pospíšilová venku, v bílém saku"
+                  fill
+                  sizes="176px"
+                  placeholder="blur"
+                  className="object-cover object-[50%_22%]"
+                  style={{
+                    filter: `grayscale(${(1 - storyProgress).toFixed(2)}) brightness(${(0.5 + 0.5 * storyProgress).toFixed(2)}) contrast(1.05)`,
+                    transition: "filter 1.6s cubic-bezier(0.22, 1, 0.36, 1)",
+                  }}
+                />
+              </div>
+            </div>
+          <ol className="flex flex-col" aria-label="Kapitoly příběhu">
             {storyChapters.map((chapter, i) => {
               const isActive = i === active;
               const isPast = i < active;
@@ -118,6 +138,7 @@ export function Story() {
               );
             })}
           </ol>
+          </div>
         </aside>
 
         {/* Pravý sloupec – kapitoly */}
