@@ -1,0 +1,397 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   DESIGN TOKENS — „Inside the Mind“
+   Tmavý antracit, teplá off-white, béžová, champagne a velmi decentní
+   modrofialové světlo synapsí.
+------------------------------------------------------------------- */
+@theme {
+  --color-ink-950: #08080a;
+  --color-ink-900: #0f0f12;
+  --color-ink-800: #17171c;
+  --color-ink-700: #212128;
+  --color-ink-600: #2e2e37;
+  --color-ink-500: #45454f;
+
+  --color-bone-50: #f7f3ed;
+  --color-bone-100: #efe9df;
+  --color-bone-200: #e3dacc;
+  --color-bone-300: #d2c6b3;
+  --color-bone-400: #b7a992;
+  --color-bone-500: #8e836f;
+  --color-bone-600: #6b6254;
+
+  --color-gold-200: #e9dcbd;
+  --color-gold-300: #dccaa3;
+  --color-gold-400: #c9b48a;
+  --color-gold-500: #b0996c;
+  --color-gold-600: #8a7650;
+
+  --color-synapse-300: #b3b0dc;
+  --color-synapse-400: #908dc9;
+  --color-synapse-500: #6f6cae;
+
+  --font-serif: var(--font-newsreader), "Newsreader", Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-manrope), "Manrope", system-ui, -apple-system, sans-serif;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+
+  --breakpoint-xs: 30rem;
+  --breakpoint-3xl: 110rem;
+
+  --container-page: 96rem;
+}
+
+/* ------------------------------------------------------------------
+   BASE
+------------------------------------------------------------------- */
+@layer base {
+  :root {
+    color-scheme: dark;
+    --nav-height: 5rem;
+  }
+
+  html {
+    background: var(--color-ink-950);
+    scroll-behavior: auto;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  body {
+    background: var(--color-ink-950);
+    color: var(--color-bone-100);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv11";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--color-gold-400) 70%, transparent);
+    color: var(--color-ink-950);
+  }
+
+  :focus-visible {
+    outline: 1px solid var(--color-gold-400);
+    outline-offset: 4px;
+    border-radius: 2px;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+    font-optical-sizing: auto;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  em {
+    font-style: italic;
+  }
+
+  img {
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* ------------------------------------------------------------------
+   TYPOGRAPHY SCALE (fluid, editorial)
+------------------------------------------------------------------- */
+@layer components {
+  .t-display {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: clamp(2.7rem, 1.9rem + 4.4vw, 7rem);
+    line-height: 1;
+    letter-spacing: -0.025em;
+  }
+  .t-h1 {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: clamp(2.5rem, 1.6rem + 3.6vw, 5.5rem);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+  }
+  .t-h2 {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: clamp(2.1rem, 1.4rem + 2.6vw, 4.25rem);
+    line-height: 1.06;
+    letter-spacing: -0.02em;
+  }
+  .t-h3 {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: clamp(1.6rem, 1.2rem + 1.4vw, 2.6rem);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+  .t-quote {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: clamp(1.7rem, 1.2rem + 2vw, 3.4rem);
+    line-height: 1.18;
+    letter-spacing: -0.015em;
+  }
+  .t-lead {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.85rem);
+    line-height: 1.4;
+  }
+  .t-body {
+    font-family: var(--font-sans);
+    font-size: clamp(0.975rem, 0.9rem + 0.25vw, 1.125rem);
+    line-height: 1.7;
+    font-weight: 400;
+  }
+  .t-small {
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    line-height: 1.6;
+  }
+  .t-label {
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    line-height: 1;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .t-label-wide {
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    line-height: 1.8;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .serif-italic {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+  }
+
+  /* Vlasová linka */
+  .hairline {
+    border-color: color-mix(in oklab, var(--color-bone-100) 12%, transparent);
+  }
+  .hairline-strong {
+    border-color: color-mix(in oklab, var(--color-gold-400) 35%, transparent);
+  }
+
+  /* Layout */
+  .page-container {
+    width: 100%;
+    max-width: var(--container-page);
+    margin-inline: auto;
+    padding-inline: clamp(1.25rem, 4vw, 4rem);
+  }
+
+  .section-space {
+    padding-block: clamp(5rem, 12vw, 11rem);
+  }
+
+  /* Tlačítka */
+  .btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.9rem;
+    font-family: var(--font-sans);
+    font-size: 0.8125rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 500;
+    padding: 1.05rem 1.9rem;
+    border-radius: 999px;
+    transition:
+      color 0.5s var(--ease-out-expo),
+      background-color 0.5s var(--ease-out-expo),
+      border-color 0.5s var(--ease-out-expo),
+      box-shadow 0.6s var(--ease-out-expo);
+    white-space: nowrap;
+  }
+  .btn-primary {
+    background: var(--color-gold-400);
+    color: var(--color-ink-950);
+    border: 1px solid var(--color-gold-400);
+  }
+  .btn-primary:hover {
+    background: var(--color-gold-300);
+    border-color: var(--color-gold-300);
+    box-shadow: 0 0 0 1px color-mix(in oklab, var(--color-gold-400) 30%, transparent),
+      0 10px 40px -10px color-mix(in oklab, var(--color-gold-400) 45%, transparent);
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--color-bone-100);
+    border: 1px solid color-mix(in oklab, var(--color-bone-100) 22%, transparent);
+  }
+  .btn-ghost:hover {
+    border-color: color-mix(in oklab, var(--color-gold-400) 70%, transparent);
+    color: var(--color-gold-200);
+  }
+
+  /* Textový odkaz s animovaným podtržením */
+  .link-line {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding-bottom: 0.35rem;
+  }
+  .link-line::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 1px;
+    width: 100%;
+    background: currentColor;
+    opacity: 0.35;
+    transform-origin: left;
+    transition: transform 0.7s var(--ease-out-expo), opacity 0.4s ease;
+  }
+  .link-line:hover::after {
+    transform: scaleX(0.6);
+    opacity: 1;
+  }
+
+  /* Neuronový uzel (dekorativní) */
+  .node {
+    position: relative;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 999px;
+    background: var(--color-gold-400);
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-gold-400) 50%, transparent);
+  }
+  .node-pulse {
+    animation: node-pulse 3.2s var(--ease-out-quint) infinite;
+  }
+  @keyframes node-pulse {
+    0% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-gold-400) 32%, transparent); }
+    70% { box-shadow: 0 0 0 9px transparent; }
+    100% { box-shadow: 0 0 0 0 transparent; }
+  }
+
+  /* Filmové zrno */
+  .grain {
+    position: fixed;
+    inset: -50%;
+    width: 200%;
+    height: 200%;
+    pointer-events: none;
+    z-index: 60;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 220px 220px;
+    mix-blend-mode: screen;
+  }
+
+  /* Masky pro obrázky */
+  .mask-fade-bottom {
+    -webkit-mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+  }
+  .mask-fade-edges {
+    -webkit-mask-image: radial-gradient(120% 100% at 50% 40%, black 45%, transparent 100%);
+    mask-image: radial-gradient(120% 100% at 50% 40%, black 45%, transparent 100%);
+  }
+
+  /* Placeholder pro chybějící obsah (TODO: DOPLNIT) */
+  .todo {
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-gold-400);
+    border: 1px dashed color-mix(in oklab, var(--color-gold-400) 45%, transparent);
+    padding: 0.35rem 0.6rem;
+    border-radius: 999px;
+    display: inline-block;
+    max-width: 100%;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+  }
+
+  /* Horizontální scroll (mobil) */
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Reveal – výchozí skrytý stav, JS animuje */
+  .js .reveal-init {
+    opacity: 0;
+  }
+}
+
+/* ------------------------------------------------------------------
+   UTILITIES
+------------------------------------------------------------------- */
+@utility text-balance {
+  text-wrap: balance;
+}
+
+@utility glow-gold {
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--color-gold-400) 20%, transparent),
+    0 20px 60px -20px color-mix(in oklab, var(--color-gold-400) 25%, transparent);
+}
+
+@utility bg-ink-gradient {
+  background: linear-gradient(180deg, transparent 0%, var(--color-ink-950) 100%);
+}
+
+/* Vlastní kurzor pouze pro jemné ukazovátko */
+@media (hover: hover) and (pointer: fine) {
+  body.has-cursor,
+  body.has-cursor a,
+  body.has-cursor button {
+    cursor: none;
+  }
+}
+
+/* Bez JS nezobrazovat preloader a skryté reveal prvky */
+noscript + * .reveal-init {
+  opacity: 1;
+}
