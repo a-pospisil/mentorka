@@ -1,16 +1,15 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { NeuralEngine } from "@/lib/neural/engine";
+import { OrganicNeural } from "@/lib/neural/organic";
 import { isNeuralPreset, neuralPresets, type NeuralPresetName } from "@/lib/neural/presets";
 import { ScrollTrigger } from "@/lib/gsap";
 import { devicePerformanceTier, prefersReducedMotionNow } from "@/lib/hooks";
-import { APP_READY_EVENT } from "@/components/ui/Preloader";
 
 /**
- * Globální neuronová síť na pozadí celého webu.
- * Sekce označené atributem data-neural="<preset>" mění cílový stav sítě
- * při scrollování – síť tak vizuálně propojuje celý příběh.
+ * Globální organická neuronová struktura na pozadí celého webu.
+ * Sekce označené data-neural="<preset>" mění při scrollování její stav
+ * (hustota, jas, přestavba spojů, posun). Rychlost scrollu vysílá impulzy.
  */
 export function NeuralBackground() {
   const ref = useRef<HTMLCanvasElement>(null);
@@ -21,55 +20,32 @@ export function NeuralBackground() {
 
     const reduced = prefersReducedMotionNow();
     const tier = devicePerformanceTier();
-    const width = window.innerWidth;
     const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-    const mobile = width < 768;
+    const mobile = window.innerWidth < 768;
 
-    const count =
-      tier === "low"
-        ? 38
-        : tier === "mid"
-          ? mobile
-            ? 52
-            : 92
-          : mobile
-            ? 60
-            : width < 1280
-              ? 110
-              : 150;
-
-    const engine = new NeuralEngine(canvas, {
-      count,
-      distribution: "uniform",
+    const engine = new OrganicNeural(canvas, {
+      seed: 2026,
+      theme: "light",
+      layout: "field",
+      somas: tier === "low" ? 3 : mobile ? 4 : 0,
+      scale: mobile ? 0.2 : 0.17,
+      maxDepth: tier === "low" ? 4 : 5,
       interactive: fine,
       maxFps: tier === "low" ? 30 : mobile ? 40 : 60,
       dprCap: mobile ? 1 : 1.5,
-      parallax: 0.12,
-      lerpRate: 1.4,
       staticFrame: reduced,
       initial: reduced ? neuralPresets.hero : neuralPresets.dormant,
-      seed: 2024,
     });
 
-    let lastPreset: NeuralPresetName | null = null;
-    let ready = reduced;
-
+    let current: NeuralPresetName = "hero";
     const apply = (name: NeuralPresetName) => {
-      lastPreset = name;
-      if (ready) engine.setTarget(neuralPresets[name]);
+      current = name;
+      engine.setTarget(neuralPresets[name]);
     };
-
-    const wake = () => {
-      if (ready) return;
-      ready = true;
-      engine.setTarget(neuralPresets[lastPreset ?? "hero"]);
-    };
-    window.addEventListener(APP_READY_EVENT, wake, { once: true });
-    const wakeFallback = window.setTimeout(wake, 3000);
-
+    // Probuzení po prvním vykreslení stránky
+    const wake = window.setTimeout(() => apply(current), 250);
     engine.start();
 
-    // Stavy podle sekcí
     const triggers: ScrollTrigger[] = [];
     document.querySelectorAll<HTMLElement>("[data-neural]").forEach((el) => {
       const name = el.dataset.neural;
@@ -77,8 +53,8 @@ export function NeuralBackground() {
       triggers.push(
         ScrollTrigger.create({
           trigger: el,
-          start: "top 62%",
-          end: "bottom 38%",
+          start: "top 60%",
+          end: "bottom 40%",
           onEnter: () => apply(name),
           onEnterBack: () => apply(name),
         }),
@@ -93,20 +69,32 @@ export function NeuralBackground() {
       document.documentElement.addEventListener("pointerleave", onPointerLeave);
     }
 
-    // Scroll (paralaxa)
-    const onScroll = () => engine.setScroll(window.scrollY);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
+    // Scroll → impulzy (podle rychlosti)
+    let lastY = window.scrollY;
+    let lastT = performance.now();
+    let budget = 0;
+    const onScroll = () => {
+      const now = performance.now();
+      const dy = Math.abs(window.scrollY - lastY);
+      const dt = Math.max(16, now - lastT);
+      lastY = window.scrollY;
+      lastT = now;
+      budget += (dy / dt) * 0.9;
+      if (budget >= 1) {
+        const n = Math.min(4, Math.floor(budget));
+        budget -= n;
+        engine.kick(n);
+      }
+    };
+    if (!reduced) window.addEventListener("scroll", onScroll, { passive: true });
 
-    // Resize
     let resizeTimer = 0;
     const onResize = () => {
       window.clearTimeout(resizeTimer);
-      resizeTimer = window.setTimeout(() => engine.resize(), 150);
+      resizeTimer = window.setTimeout(() => engine.resize(), 180);
     };
     window.addEventListener("resize", onResize);
 
-    // Viditelnost záložky
     const onVisibility = () => {
       if (document.hidden) engine.stop();
       else engine.start();
@@ -114,9 +102,8 @@ export function NeuralBackground() {
     document.addEventListener("visibilitychange", onVisibility);
 
     return () => {
-      window.clearTimeout(wakeFallback);
+      window.clearTimeout(wake);
       window.clearTimeout(resizeTimer);
-      window.removeEventListener(APP_READY_EVENT, wake);
       window.removeEventListener("pointermove", onPointerMove);
       document.documentElement.removeEventListener("pointerleave", onPointerLeave);
       window.removeEventListener("scroll", onScroll);

@@ -2,7 +2,7 @@ import { isTodo, site } from "@/config/site";
 import { services } from "@/content/services";
 
 /**
- * Schema.org – Person + nabízené služby.
+ * Schema.org – Person + WebSite + nabízené služby.
  * Neuvádí žádné neověřené údaje (kontakty jen pokud jsou vyplněné).
  */
 export function JsonLd() {
@@ -35,7 +35,7 @@ export function JsonLd() {
     "@id": `${site.url}/#${s.id}`,
     position: i + 1,
     name: s.title,
-    description: s.description,
+    description: s.text,
     serviceType: s.title,
     provider: { "@id": personId },
     areaServed: "CZ",
@@ -57,10 +57,5 @@ export function JsonLd() {
     "@graph": [person, website, ...serviceItems],
   };
 
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
-    />
-  );
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />;
 }

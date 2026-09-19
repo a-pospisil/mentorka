@@ -1,80 +1,71 @@
+import { site } from "@/config/site";
 import type { NeuralPresetName } from "@/lib/neural/presets";
 
 /**
- * Příběh Vladislavy – texty jsou pracovní verze v profesionálním tónu.
- * Události odpovídají zadání (ztráta manžela před osmi lety); vše ostatní
- * je formulováno obecně, bez konkrétních vymyšlených údajů.
- *
- * TODO: DOPLNIT – zkontrolujte časové údaje („před osmi lety“) při spuštění.
+ * 03 PŘÍBĚH – zkrácený storytelling: ZTRÁTA → HLEDÁNÍ → POCHOPENÍ → NOVÝ SMĚR → POMOC DRUHÝM.
+ * Fakta odpovídají zadání (ztráta manžela před osmi lety); nic dalšího se nevymýšlí.
  */
 
-export const storyIntro = {
-  label: "Příběh",
-  headline: "Některé věci pochopíme až ve chvíli, kdy je sami *prožijeme*.",
-  quiet:
-    "Před osmi lety jsem přišla o manžela. To, co následovalo, mě naučilo víc než jakákoli kniha: jak se člověk ztrácí, jak dlouho trvá ticho a jak nenápadně se vrací život.",
+const YEARS: Record<number, string> = {
+  2: "dvěma", 3: "třemi", 4: "čtyřmi", 5: "pěti", 6: "šesti", 7: "sedmi", 8: "osmi", 9: "devíti",
+  10: "deseti", 11: "jedenácti", 12: "dvanácti", 13: "třinácti", 14: "čtrnácti", 15: "patnácti",
 };
 
-export interface StoryChapter {
+/** „osmi lety“ – nebo spočítané z site.lossYear, pokud je vyplněný. */
+export const yearsAgoText = (): string => {
+  if (!site.lossYear) return "osmi lety";
+  const n = new Date().getFullYear() - site.lossYear;
+  if (n <= 1) return "rokem";
+  return `${YEARS[n] ?? n} lety`;
+};
+
+export const storyIntro = {
+  label: "Můj příběh",
+  headline: `Před ${yearsAgoText()} jsem přišla o *manžela*.`,
+  lead: "To, co následovalo, mě naučilo víc než jakákoli kniha. A přivedlo mě k práci, kterou dnes dělám.",
+};
+
+export interface StoryStep {
   id: string;
   label: string;
-  title: string;
   text: string;
   neural: NeuralPresetName;
 }
 
-export const storyChapters: StoryChapter[] = [
+export const storySteps: StoryStep[] = [
   {
     id: "ztrata",
     label: "Ztráta",
-    title: "V jediném okamžiku se rozpadlo všechno, co jsem považovala za samozřejmé.",
-    text:
-      "Nebyl to jen konec společného života. Byl to i konec té verze mě, která existovala jen vedle něj. Najednou jsem nevěděla, kdo jsem, když nejsem něčí žena.",
+    text: "Skončil společný život. A s ním i ta verze mě, která existovala jen vedle něj.",
     neural: "loss",
-  },
-  {
-    id: "ticho",
-    label: "Ticho",
-    title: "Svět jde dál. Vy ne.",
-    text:
-      "Po ztrátě přichází ticho. Telefony postupně přestávají zvonit, okolí se vrací ke svým dnům a člověk zůstává sám s otázkou, co teď. Nepotřebovala jsem rady. Potřebovala jsem někoho, kdo vydrží být vedle mě.",
-    neural: "silence",
   },
   {
     id: "hledani",
     label: "Hledání",
-    title: "Hledala jsem, jak žít dál. Ne jak zapomenout.",
-    text:
-      "Četla jsem, ptala se, zkoušela. Postupně jsem pochopila, že bolest se nedá obejít, ale dá se projít. A že způsob, jakým o sobě přemýšlíme, rozhoduje o tom, kudy půjdeme dál.",
+    text: "Okolí se vrátilo ke svým dnům. Já hledala, jak žít dál. Ne jak zapomenout.",
     neural: "searching",
   },
   {
     id: "pochopeni",
     label: "Pochopení",
-    title: "Vzorce nejsou osud.",
-    text:
-      "Objevila jsem, jak mozek vytváří vzorce: myšlenky, které se vracejí, reakce, které se spouštějí samy. A také to, že žádný z těchto vzorců není konečný. Dá se pozorovat, pojmenovat a krok za krokem měnit.",
+    text: "Myšlenky, které se vracejí, nejsou osud. Jsou to vzorce. A vzorce se dají měnit.",
     neural: "understanding",
   },
   {
     id: "novy-smer",
     label: "Nový směr",
-    title: "Život se nevrátil do starých kolejí. Našel nové.",
-    text:
-      "Cesta k NLP a coachingu mi dala jazyk pro to, co jsem prožila, a nástroje, jak s tím pracovat. Ne proti bolesti, ale s ní. Ne rychle, ale opravdově.",
+    text: "NLP a coaching mi daly jazyk i nástroje. Život se nevrátil do starých kolejí. Našel nové.",
     neural: "direction",
   },
   {
     id: "pomoc-druhym",
     label: "Pomoc druhým",
-    title: "Dnes stojím vedle lidí, kteří jsou tam, kde jsem kdysi byla já.",
-    text:
-      "Neslibuji rychlá řešení. Nabízím čas, pozornost a metody, které fungují i ve chvíli, kdy se změna zdá nemožná.",
+    text: "Dnes stojím vedle lidí, kteří jsou tam, kde jsem byla já. Bez rychlých řešení. S časem a pozorností.",
     neural: "helping",
   },
 ];
 
 export const storyOutro = {
-  quote: "Směr se neztratil. Jen jsem ho musela znovu *najít*.",
   caption: "Nový směr",
+  quote: "Směr se neztratil. Jen jsem ho musela znovu *najít*.",
 };

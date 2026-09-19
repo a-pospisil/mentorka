@@ -1,15 +1,18 @@
 # Vladislava Pospíšilová – osobní web
 
 Prémiový jednostránkový web mentorky Vladislavy Pospíšilové (NLP · coaching · prevence vyhoření · podpora po ztrátě).
-Vizuální koncept **„Inside the Mind“**: návštěvník prochází stránkou jako lidským mozkem – neuronová síť na pozadí
-se během příběhu mění z fragmentované a tmavé (ztráta) v propojenou a stabilní (nový směr, pomoc druhým).
+
+Koncept **„Nový směr“**: světlý, klidný, lidský web s jednou organickou neuronovou strukturou, která se v různých
+formách vrací napříč stránkou – kolem portrétu v hero, jako pomalu dýchající pozadí, jako interaktivní vrchol
+(Podnět → Myšlenka → Emoce → Reakce → Vzorec → Nová cesta) a jako mikroformy u jednotlivých bloků.
+Cílem stránky je první nezávazný rozhovor: ZASTAVÍ → ZAUJME → POZNÁ SE → ZAČNE DŮVĚŘOVAT → NAPÍŠE.
 
 ## Stack
 
 - **Next.js 16** (App Router, Turbopack) · **React 19** · **TypeScript**
 - **Tailwind CSS 4** (design tokeny v `src/app/globals.css`)
-- **GSAP + ScrollTrigger** (scroll storytelling, reveal animace), **Lenis** (smooth scroll)
-- Vlastní **Canvas 2D neuronový engine** (`src/lib/neural/engine.ts`) – žádný Three.js, GPU‑friendly, adaptivní počet uzlů a FPS
+- **GSAP + ScrollTrigger** (pin neuronové experience, reveal animace), **Lenis** (smooth scroll)
+- Vlastní **Canvas 2D organický neuronový engine** (`src/lib/neural/organic.ts`) – bez Three.js, adaptivní výkon
 - Fonty přes `next/font` (Newsreader – serif, Manrope – sans), self‑hosted při buildu
 - Připraveno pro nasazení na **Vercel**
 
@@ -33,69 +36,78 @@ cp .env.example .env.local   # NEXT_PUBLIC_SITE_URL=https://www.vase-domena.cz
 
 Pořadí: `NEXT_PUBLIC_SITE_URL` → produkční doména Vercelu (`VERCEL_PROJECT_PRODUCTION_URL`) → výchozí doména
 v `src/config/site.ts`. Prázdná nebo nevalidní hodnota se ignoruje, build tím nikdy nespadne.
-Na Vercelu proměnnou buď vůbec nenastavujte (použije se doména projektu), nebo ji vyplňte celou včetně `https://`.
+
+## Struktura stránky
+
+| # | Sekce | Komponenta | Obsah |
+| --- | --- | --- | --- |
+| 01 | Hero | `sections/Hero.tsx` | `content/hero.ts` |
+| 02 | Poznáte se v tom? | `sections/Situations.tsx` | `content/situations.ts` |
+| 03 | Můj příběh + cinematic foto | `sections/Story.tsx` | `content/story.ts` |
+| 04 | Neuronová experience (tmavá) | `sections/Patterns.tsx` | `content/patterns.ts` |
+| 05 | S čím pomáhám | `sections/Services.tsx` | `content/services.ts` |
+| 06 | Jak to probíhá | `sections/Process.tsx` | `content/process.ts` |
+| 07 | Důvěra | `sections/Trust.tsx` | `content/trust.ts` |
+| 08 | Finální CTA + kontakt | `sections/FinalCta.tsx` | `content/contact.ts` + `config/site.ts` |
+
+Sticky CTA: na desktopu je trvalé tlačítko v pevné navigaci, na mobilu spodní lišta (`layout/StickyCta.tsx`),
+která se zobrazí po opuštění hero a skryje u finální výzvy.
+
+## Co doplnit před spuštěním (TODO systém)
+
+Hodnoty začínající `TODO: DOPLNIT` se na webu vykreslí jako zřetelně označený placeholder (žlutá pilulka
+s přerušovaným rámečkem). Nic z toho není vymyšlené – doplňte pouze skutečné údaje.
+
+| Co | Kde |
+| --- | --- |
+| E‑mail, telefon, místo setkávání, sociální sítě | `src/config/site.ts` → `site.contact`, `site.social` |
+| Rok ztráty manžela (text „před osmi lety“ se pak počítá automaticky) | `src/config/site.ts` → `site.lossYear` |
+| Krizová linka (ověřit číslo) | `src/config/site.ts` → `site.crisisLine` |
+| Vzdělání, certifikace, praxe | `src/content/trust.ts` → `credentials`, `practice` |
+| Reference klientů | `src/content/trust.ts` → `testimonials` (placeholder karty zmizí, jakmile přidáte první) |
+| Skrýt všechny placeholdery najednou | `src/content/trust.ts` → `showPlaceholders = false` |
+| Finální doména | `NEXT_PUBLIC_SITE_URL` nebo `src/config/site.ts` |
+
+Jakmile je vyplněný e‑mail, všechna CTA „Domluvit nezávazný rozhovor“ vedou přímo na `mailto:`;
+do té doby scrollují na kontaktní sekci.
+
+## Fotografie
+
+Žádná galerie – každá fotografie má dramaturgickou roli. Přiřazení je v `src/content/photos.ts`:
+
+| Role | Soubor |
+| --- | --- |
+| Hero portrét (s neuronovým halo) | `vladislava-city.jpg` |
+| Jedna velká fotografie v příběhu (sticky) | `vladislava-scarf.jpg` |
+| Cinematic fotografie „Nový směr“ | `vladislava-road.jpg` |
+| Malý portrét u „Jak to probíhá“ | `vladislava-portrait.jpg` |
+| Portrét u finálního CTA | `vladislava-blouse.jpg` |
+
+Nové fotografie vložte do `src/assets/images/` a přepište import. Doporučené rozlišení pro hero a příběh:
+alespoň 1200 px na šířku (současné originály mají 683 px, na retina displejích jsou měkčí).
+
+## Neuronová síť
+
+- `src/lib/neural/organic.ts` – engine: neurony (somy) s dendrity kreslenými jako měkké křivky, synaptické spoje
+  mezi výběžky, světelné impulzy (při scrollu jich přibývá), přestavba (staré větve se rozpadají od špičky, nové rostou).
+  Layouty `field` (pozadí), `halo` (kolem portrétu), `chain` (řetězec vzorce), světlé i tmavé téma.
+- `src/lib/neural/presets.ts` – stavy sítě pro jednotlivé sekce (`data-neural="<preset>"` na sekci).
+  V příběhu: `loss` (rozpad) → `searching` (přestavba) → `understanding` → `direction` → `helping` (propojení).
+- `src/lib/neural/glyph.ts` – deterministické SVG mikroformy (bloky „Poznáte se v tom?“ a oblasti pomoci).
+- Neuronová experience (`sections/Patterns.tsx`): pozice uzlů `HUBS_DESKTOP` / `HUBS_MOBILE`, časová osa
+  `CHAIN_TIMELINE` v `organic.ts`.
+- Výkon: limit DPR a FPS, adaptivní hustota podle zařízení, pauza mimo viewport a při skryté záložce.
+- `prefers-reduced-motion`: síť se vykreslí jako statický snímek, pin i smooth scroll se vypnou.
 
 ## Kde se co upravuje
 
 | Co | Soubor |
 | --- | --- |
-| Kontakty, doména, navigace, krizová linka | `src/config/site.ts` |
-| Příběh (kapitoly Ztráta → Pomoc druhým) | `src/content/story.ts` |
-| Neuroplasticita (diagram + vysvětlení) | `src/content/brain.ts` |
-| Služby (4 oblasti, průběh spolupráce) | `src/content/services.ts` |
-| „Když už nemůžete dál“ | `src/content/companion.ts` |
-| Galerie fotografií | `src/content/photos.ts` (+ obrázky v `src/assets/images`) |
-| Timeline „Moje cesta“, vzdělání a výcviky | `src/content/journey.ts` |
-| Reference klientů | `src/content/testimonials.ts` |
-| Kontaktní sekce (texty, disclaimer) | `src/content/contact.ts` |
-| Stavy neuronové sítě pro jednotlivé sekce | `src/lib/neural/presets.ts` |
-| Barvy, typografie, tlačítka | `src/app/globals.css` |
-
-Hodnoty začínající `TODO: DOPLNIT` se na webu zobrazují jako zřetelně označený placeholder.
-Žádné reference, certifikace ani kontaktní údaje nejsou vymyšlené – doplňte skutečné.
-
-### Přidání fotografií
-
-1. Vložte soubor do `src/assets/images/`.
-2. V `src/content/photos.ts` ho naimportujte a přidejte položku do pole `photos`
-   (`ratio`, `treatment` = `color | mono | warm`, `position`).
-3. Placeholder položky (`placeholder: true`) odstraňte.
-
-Fotografie použité mimo galerii jsou pojmenované exporty v témže souboru: `heroPortrait` (hero),
-`storyPortrait` (sticky portrét v příběhu, který se s kapitolami vrací do barev), `contactPortrait` (kontakt) a `road` (odhalení na konci příběhu).
-
-### Přidání referencí
-
-Do pole `testimonials` v `src/content/testimonials.ts` přidejte `{ quote, name, context?, image? }`.
-Sekce se vykreslí automaticky; dokud je pole prázdné, zobrazí se placeholder karty
-(`showTestimonialPlaceholder = false` je skryje úplně).
-
-## Struktura
-
-```
-src/
-  app/            layout, page, globals.css, OG obrázek, sitemap, robots, ikony
-  components/
-    layout/       Nav, Footer
-    neural/       NeuralBackground (globální síť), HeroNeural (halo kolem portrétu)
-    providers/    SmoothScroll (Lenis + ScrollTrigger)
-    sections/     Hero, Story, Brain, Services (+ ServiceGlyph), Companion, Gallery,
-                  Journey, Testimonials, Contact
-    seo/          JsonLd (Schema.org Person + Service)
-    ui/           TextReveal, Reveal, MagneticButton, Cursor, Preloader, SectionHeading …
-  config/         site.ts
-  content/        veškeré texty a data
-  lib/            gsap.ts, hooks.ts, utils.ts, neural/{engine,presets}.ts
-```
-
-## Neuronová síť
-
-- Každá sekce nese `data-neural="<preset>"`; ScrollTrigger při vjezdu nastaví cílový stav
-  (connectivity, brightness, speed, jitter, pulseRate, violet, reach) a engine k němu plynule interpoluje.
-- Kurzor uzly „aktivuje“ (rozsvítí je i jejich spoje), impulzy putují po spojích a pokračují sítí.
-- Výkon: limit DPR, adaptivní počet uzlů podle zařízení, 30–40 FPS na mobilu, pauza při skryté záložce,
-  hero halo běží jen když je vidět.
-- `prefers-reduced-motion`: síť se vykreslí jako jeden statický snímek, smooth scroll i reveal animace se vypnou.
+| Kontakty, doména, navigace, texty CTA, krizová linka | `src/config/site.ts` |
+| Texty všech sekcí | `src/content/*.ts` |
+| Barvy, typografie, tlačítka, placeholder styl | `src/app/globals.css` |
+| Stavy neuronové sítě | `src/lib/neural/presets.ts` |
+| Open Graph obrázek | `src/app/opengraph-image.tsx` |
 
 ## SEO
 

@@ -4,23 +4,24 @@ import { useRef, type ElementType } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { parseEmphasis, stripEmphasis, cn } from "@/lib/utils";
 import { prefersReducedMotionNow } from "@/lib/hooks";
-import { APP_READY_EVENT } from "./Preloader";
 
 interface TextRevealProps {
   text: string;
   as?: ElementType;
   className?: string;
-  /** scroll = při vjezdu do viewportu, ready = po preloaderu. */
+  /** scroll = při vjezdu do viewportu, ready = hned po načtení. */
   trigger?: "scroll" | "ready";
   delay?: number;
   stagger?: number;
   start?: string;
   id?: string;
+  /** Třída kurzívy `*slovo*` – např. text-gold-200 na tmavém podkladu. */
+  emphasisClass?: string;
 }
 
 /**
  * Odhalení textu po slovech (posun + rozostření + průhlednost).
- * `*slovo*` = serifová kurzíva ve zlaté.
+ * `*slovo*` = serifová kurzíva v champagne.
  */
 export function TextReveal({
   text,
@@ -31,6 +32,7 @@ export function TextReveal({
   stagger = 0.045,
   start = "top 85%",
   id,
+  emphasisClass = "text-gold-600",
 }: TextRevealProps) {
   const ref = useRef<HTMLElement>(null);
 
@@ -44,42 +46,17 @@ export function TextReveal({
         gsap.set(el, { opacity: 1 });
         return;
       }
-      gsap.set(words, { opacity: 0, y: 26, filter: "blur(8px)" });
+      gsap.set(words, { opacity: 0, y: 22, filter: "blur(6px)" });
       gsap.set(el, { opacity: 1 });
-
-      const play = () =>
-        gsap.to(words, {
-          opacity: 1,
-          y: 0,
-          filter: "blur(0px)",
-          duration: 1.3,
-          stagger,
-          delay,
-          ease: "power4.out",
-          overwrite: true,
-          onComplete: () => gsap.set(words, { clearProps: "filter,transform" }),
-        });
-
-      if (trigger === "ready") {
-        if (document.documentElement.classList.contains("is-ready")) {
-          play();
-        } else {
-          const handler = () => play();
-          window.addEventListener(APP_READY_EVENT, handler, { once: true });
-          return () => window.removeEventListener(APP_READY_EVENT, handler);
-        }
-        return;
-      }
-
       gsap.to(words, {
         opacity: 1,
         y: 0,
         filter: "blur(0px)",
-        duration: 1.3,
+        duration: 1.2,
         stagger,
         delay,
         ease: "power4.out",
-        scrollTrigger: { trigger: el, start, once: true },
+        scrollTrigger: trigger === "scroll" ? { trigger: el, start, once: true } : undefined,
         onComplete: () => gsap.set(words, { clearProps: "filter,transform" }),
       });
     },
@@ -100,10 +77,7 @@ export function TextReveal({
       children.push(
         <span
           key={key++}
-          className={cn(
-            "tr-word inline-block will-change-transform",
-            seg.italic && "serif-italic text-gold-300",
-          )}
+          className={cn("tr-word inline-block will-change-transform", seg.italic && cn("serif-italic", emphasisClass))}
         >
           {w}
         </span>,

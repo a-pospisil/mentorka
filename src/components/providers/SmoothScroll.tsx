@@ -10,7 +10,7 @@ let lenisInstance: Lenis | null = null;
 export const getLenis = () => lenisInstance;
 
 /** Plynulý scroll na cíl (kotva nebo element). Bez Lenis použije nativní scroll. */
-export function scrollToTarget(target: string | HTMLElement, offset = 0) {
+export function scrollToTarget(target: string | HTMLElement, offset = -48) {
   const el =
     typeof target === "string" ? document.querySelector<HTMLElement>(target) : target;
   if (!el) return;
