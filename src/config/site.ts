@@ -12,14 +12,39 @@ export const TODO_PREFIX = "TODO: DOPLNIT";
 export const isTodo = (value?: string | null): boolean =>
   !value || value.trim().toUpperCase().startsWith("TODO");
 
+/** TODO: DOPLNIT finální doménu (nebo nastavte NEXT_PUBLIC_SITE_URL). */
+const FALLBACK_SITE_URL = "https://www.vladislavapospisilova.cz";
+
+/**
+ * Veřejná URL webu pro canonical, Open Graph, sitemap a robots.
+ * Priorita: NEXT_PUBLIC_SITE_URL → produkční doména Vercelu → výchozí doména.
+ * Prázdná nebo nevalidní hodnota se ignoruje, aby build nikdy nespadl
+ * na `new URL("")`.
+ */
+function resolveSiteUrl(): string {
+  const vercel = process.env.VERCEL_PROJECT_PRODUCTION_URL;
+  const candidates = [process.env.NEXT_PUBLIC_SITE_URL, vercel ? `https://${vercel}` : undefined];
+  for (const raw of candidates) {
+    const value = raw?.trim();
+    if (!value) continue;
+    const withProtocol = /^https?:\/\//i.test(value) ? value : `https://${value}`;
+    try {
+      return new URL(withProtocol).origin;
+    } catch {
+      // nevalidní hodnota – zkusit další kandidát
+    }
+  }
+  return FALLBACK_SITE_URL;
+}
+
 export const site = {
   name: "Vladislava Pospíšilová",
   firstName: "Vladislava",
   /** Krátký popis role – používá se v metadatech a Schema.org. */
   role: "Mentorka, NLP a coaching",
   tagline: "NLP · Coaching · Prevence vyhoření · Podpora po ztrátě",
-  /** TODO: DOPLNIT finální doménu (nebo nastavte NEXT_PUBLIC_SITE_URL). */
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.vladislavapospisilova.cz",
+  /** Viz resolveSiteUrl() – bez koncového lomítka. */
+  url: resolveSiteUrl(),
   locale: "cs_CZ",
   language: "cs",
   description:

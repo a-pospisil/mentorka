@@ -31,6 +31,10 @@ Volitelně nastavte veřejnou URL (canonical, Open Graph, sitemap, robots):
 cp .env.example .env.local   # NEXT_PUBLIC_SITE_URL=https://www.vase-domena.cz
 ```
 
+Pořadí: `NEXT_PUBLIC_SITE_URL` → produkční doména Vercelu (`VERCEL_PROJECT_PRODUCTION_URL`) → výchozí doména
+v `src/config/site.ts`. Prázdná nebo nevalidní hodnota se ignoruje, build tím nikdy nespadne.
+Na Vercelu proměnnou buď vůbec nenastavujte (použije se doména projektu), nebo ji vyplňte celou včetně `https://`.
+
 ## Kde se co upravuje
 
 | Co | Soubor |
