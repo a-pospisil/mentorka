@@ -1,4 +1,4 @@
-import { bookingEmbedSrc, bookingUrl, isTodo, site } from "@/config/site";
+import { bookingEmbedSrc, bookingUrl, hasAnyBooking } from "@/config/site";
 import { booking as bookingContent } from "@/content/contact";
 import { Reveal } from "@/components/ui/Reveal";
 import { MagneticButton } from "@/components/ui/MagneticButton";
@@ -6,9 +6,9 @@ import { Arrow } from "@/components/ui/Arrow";
 
 /**
  * Rezervace termínu přes plánek schůzek Google Workspace.
- * – odkaz vyplněný + embed zapnutý → vložený rezervační kalendář
- * – odkaz vyplněný, embed vypnutý  → tlačítko na rezervační stránku
- * – odkaz nevyplněný               → nápověda, kde odkaz doplnit
+ * Zobrazí hlavní plánek (site.booking.primary) – vložený kalendář i odkaz.
+ * Odkazy na ostatní délky setkání jsou u jednotlivých karet v ceníku.
+ * Dokud není vyplněný žádný plánek, zobrazí se návod, kde odkazy vzít.
  */
 export function Booking() {
   const url = bookingUrl();
@@ -16,17 +16,19 @@ export function Booking() {
 
   if (!url) {
     // Placeholder se drží stejného vzoru jako ostatní chybějící údaje.
-    return isTodo(site.booking.url) ? (
+    return hasAnyBooking() ? null : (
       <Reveal className="todo-block mt-14 p-7 lg:mt-20">
         <span className="todo">TODO: DOPLNIT rezervační kalendář</span>
-        <p className="t-small mt-4 max-w-[62ch] text-ink-500">
-          V Google Kalendáři vytvořte „Plánek schůzek“, zkopírujte odkaz na rezervační
-          stránku a vložte ho do <code className="text-ink-700">site.booking.url</code> v souboru{" "}
-          <code className="text-ink-700">src/config/site.ts</code>. Kalendář se pak zobrazí
-          přímo zde a hlavní tlačítka povedou na rezervaci.
+        <p className="t-small mt-4 max-w-[68ch] text-ink-500">
+          V Google Kalendáři účtu <strong className="text-ink-700">vladislava@mentorka.eu</strong>{" "}
+          vytvořte tři plánky schůzek – úvodní rozhovor (30 min), první sezení (2 h) a další
+          sezení (1 h). Odkazy na rezervační stránky vložte do{" "}
+          <code className="text-ink-700">site.booking.schedules</code> v souboru{" "}
+          <code className="text-ink-700">src/config/site.ts</code>. Kalendář se pak zobrazí přímo
+          zde, karty v ceníku dostanou tlačítko Rezervovat a hlavní tlačítka povedou na rezervaci.
         </p>
       </Reveal>
-    ) : null;
+    );
   }
 
   return (
@@ -48,7 +50,7 @@ export function Booking() {
       </Reveal>
 
       {embed ? (
-        <Reveal delay={0.1} className="mt-8 overflow-hidden rounded-[1.5rem] bg-paper-50 p-1 hairline border lg:mt-10">
+        <Reveal delay={0.1} className="mt-8 overflow-hidden rounded-[1.5rem] border hairline bg-paper-50 p-1 lg:mt-10">
           <iframe
             src={embed}
             title={bookingContent.iframeTitle}

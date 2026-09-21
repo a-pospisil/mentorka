@@ -1,5 +1,6 @@
-import { ctaLinkProps, CTA_PRIMARY } from "@/config/site";
+import { bookingUrlFor, ctaLinkProps, CTA_PRIMARY } from "@/config/site";
 import { pricing, pricingIntro, pricingTerms } from "@/content/pricing";
+import { booking as bookingContent } from "@/content/contact";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 import { MagneticButton } from "@/components/ui/MagneticButton";
@@ -85,6 +86,22 @@ export function Pricing() {
                   <p className={cn("t-small mt-2", item.highlight ? "text-paper-400" : "text-ink-500")}>
                     {item.priceNote}
                   </p>
+                ) : null}
+
+                {bookingUrlFor(item.id) ? (
+                  <a
+                    href={bookingUrlFor(item.id) as string}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={cn(
+                      "btn btn-sm mt-5 w-full",
+                      item.highlight ? "btn-light" : "btn-ghost",
+                    )}
+                  >
+                    {bookingContent.reserveLabel}
+                    <span className="sr-only"> – {item.title}</span>
+                    <Arrow className="h-3 w-3" />
+                  </a>
                 ) : null}
               </footer>
             </article>

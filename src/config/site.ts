@@ -66,7 +66,7 @@ export const site = {
   ],
 
   contact: {
-    email: "vladislava@mentorka.cz",
+    email: "vladislava@mentorka.eu",
     phone: `${TODO_PREFIX} telefon`,
     /** Např. „Praha“ nebo „Praha · online“. Prázdné = nezobrazí se. */
     location: "",
@@ -78,21 +78,30 @@ export const site = {
   social: [] as { label: string; href: string }[],
 
   /**
-   * Online rezervace termínů přes Google Workspace.
+   * Online rezervace termínů přes Google Workspace (účet vladislava@mentorka.eu).
    *
-   * Jak odkaz získat: Google Kalendář → Vytvořit → „Plánek schůzek“
-   * (Appointment schedule) → nastavit délku, dostupnost a rezervační
-   * formulář → Uložit → tlačítko „Otevřít stránku rezervací“ → zkopírovat
-   * adresu (začíná https://calendar.google.com/calendar/appointments/schedules/).
+   * Jeden „Plánek schůzek“ (Appointment schedule) umí jen jednu délku setkání,
+   * proto je potřeba vytvořit tři – pro každou položku ceníku jeden:
    *
-   * Jakmile je odkaz vyplněný, hlavní tlačítka vedou na rezervaci
-   * a v sekci Kontakt se zobrazí vložený rezervační kalendář.
-   * Dokud je TODO, tlačítka otevírají e-mail.
+   *   1. Google Kalendář → Vytvořit → Plánek schůzek
+   *   2. nastavit délku (30 min / 2 h / 1 h), dostupnost, cenu a formulář
+   *   3. Uložit → „Otevřít stránku rezervací“ → zkopírovat adresu
+   *      (začíná https://calendar.google.com/calendar/appointments/schedules/)
+   *   4. vložit níže ke správnému klíči
    *
-   * TODO: DOPLNIT odkaz na plánek schůzek (viz postup výše).
+   * Klíče odpovídají `id` položek v src/content/pricing.ts. Každá karta
+   * ceníku s vyplněným odkazem dostane tlačítko Rezervovat; plánek uvedený
+   * v `primary` je cílem hlavních tlačítek a vloženého kalendáře v Kontaktu.
+   * Dokud je odkaz TODO, tlačítka otevírají e-mail.
    */
   booking: {
-    url: `${TODO_PREFIX} odkaz na rezervační stránku Google Kalendáře`,
+    schedules: {
+      "uvodni-rozhovor": `${TODO_PREFIX} odkaz na plánek – úvodní rozhovor 30 min`,
+      "prvni-sezeni": `${TODO_PREFIX} odkaz na plánek – první sezení 2 h`,
+      "dalsi-sezeni": `${TODO_PREFIX} odkaz na plánek – další sezení 1 h`,
+    } as Record<string, string>,
+    /** Který plánek je cílem hlavních tlačítek a vloženého kalendáře. */
+    primary: "uvodni-rozhovor",
     /** Vložit rezervační kalendář přímo do stránky (iframe). */
     embed: true,
   },
@@ -132,16 +141,28 @@ export type Site = typeof site;
 export const contactHref = (): string =>
   isTodo(site.contact.email) ? "#kontakt" : `mailto:${site.contact.email}`;
 
-/** Ověřená adresa rezervační stránky, nebo null, dokud není vyplněná. */
-export const bookingUrl = (): string | null => {
-  if (isTodo(site.booking.url)) return null;
+/**
+ * Ověřený odkaz na plánek schůzek podle klíče (= id položky ceníku),
+ * nebo null, dokud není vyplněný. Nehttps adresu záměrně odmítá –
+ * rezervace se nesmí otevřít po nešifrovaném spojení.
+ */
+export const bookingUrlFor = (key: string): string | null => {
+  const raw = site.booking.schedules[key];
+  if (!raw || isTodo(raw)) return null;
   try {
-    const url = new URL(site.booking.url.trim());
+    const url = new URL(raw.trim());
     return url.protocol === "https:" ? url.toString() : null;
   } catch {
     return null;
   }
 };
+
+/** Plánek, na který vedou hlavní tlačítka (výchozí: úvodních 30 minut zdarma). */
+export const bookingUrl = (): string | null => bookingUrlFor(site.booking.primary);
+
+/** Je vyplněný aspoň jeden plánek? */
+export const hasAnyBooking = (): boolean =>
+  Object.keys(site.booking.schedules).some((key) => bookingUrlFor(key) !== null);
 
 /**
  * Zdroj pro vložený rezervační kalendář. Google vyžaduje parametr `gv=true`,

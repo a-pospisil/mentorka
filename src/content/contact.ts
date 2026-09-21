@@ -15,5 +15,7 @@ export const booking = {
   label: "Rezervace termínu",
   text: "Vyberte si volný termín přímo v mém kalendáři. Úvodních 30 minut je zdarma.",
   openLabel: "Otevřít v novém okně",
+  /** Tlačítko na kartě ceníku. */
+  reserveLabel: "Rezervovat termín",
   iframeTitle: "Rezervace termínu v kalendáři Vladislavy Pospíšilové",
 };
