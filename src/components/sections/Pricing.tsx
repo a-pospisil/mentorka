@@ -1,4 +1,4 @@
-import { contactHref, CTA_PRIMARY } from "@/config/site";
+import { ctaLinkProps, CTA_PRIMARY } from "@/config/site";
 import { pricing, pricingIntro, pricingTerms } from "@/content/pricing";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
@@ -27,7 +27,7 @@ export function Pricing() {
                   : "bg-paper-200",
               )}
             >
-              <header className="flex items-center gap-3">
+              <header className="flex flex-wrap items-center gap-x-3 gap-y-2">
                 <span
                   className={cn("node", item.highlight ? "node-violet" : "")}
                   aria-hidden="true"
@@ -35,6 +35,11 @@ export function Pricing() {
                 <span className={cn("t-label", item.highlight ? "text-gold-300" : "text-gold-700")}>
                   {item.index}
                 </span>
+                {item.badge ? (
+                  <span className="t-label rounded-full bg-gold-200 px-3 py-1 text-gold-700">
+                    {item.badge}
+                  </span>
+                ) : null}
               </header>
 
               <h3 className={cn("t-h3 mt-5", item.highlight ? "text-paper-50" : "text-ink-900")}>
@@ -64,11 +69,17 @@ export function Pricing() {
               >
                 <p
                   className={cn(
-                    "font-serif text-4xl leading-none",
+                    "flex flex-wrap items-baseline gap-x-3 gap-y-1 font-serif text-4xl leading-none",
                     item.highlight ? "text-gold-300" : "text-ink-900",
                   )}
                 >
                   {item.price}
+                  {item.priceRegular ? (
+                    <s className="text-2xl text-ink-400 decoration-1">
+                      <span className="sr-only">běžná cena </span>
+                      {item.priceRegular}
+                    </s>
+                  ) : null}
                 </p>
                 {item.priceNote ? (
                   <p className={cn("t-small mt-2", item.highlight ? "text-paper-400" : "text-ink-500")}>
@@ -94,7 +105,7 @@ export function Pricing() {
           </Reveal>
 
           <Reveal delay={0.15} className="flex items-end lg:col-span-5">
-            <MagneticButton href={contactHref()} className="btn btn-primary">
+            <MagneticButton {...ctaLinkProps()} className="btn btn-primary">
               {CTA_PRIMARY}
               <Arrow />
             </MagneticButton>

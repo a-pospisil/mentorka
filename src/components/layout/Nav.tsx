@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { navigation, site, contactHref, CTA_SHORT } from "@/config/site";
+import { navigation, site, ctaLinkProps, CTA_SHORT } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { getLenis } from "@/components/providers/SmoothScroll";
 
@@ -111,7 +111,7 @@ export function Nav() {
               </li>
             ))}
             <li>
-              <a href={contactHref()} className="btn btn-primary btn-sm">
+              <a {...ctaLinkProps()} className="btn btn-primary btn-sm">
                 {CTA_SHORT}
               </a>
             </li>
@@ -185,7 +185,7 @@ export function Nav() {
           style={{ transitionDelay: open ? "420ms" : "0ms" }}
         >
           <p className="t-label text-ink-500">{site.tagline}</p>
-          <a href={contactHref()} onClick={() => setOpen(false)} className="btn btn-primary w-fit" tabIndex={open ? 0 : -1}>
+          <a {...ctaLinkProps()} onClick={() => setOpen(false)} className="btn btn-primary w-fit" tabIndex={open ? 0 : -1}>
             {CTA_SHORT}
           </a>
         </div>

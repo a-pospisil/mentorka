@@ -66,7 +66,7 @@ export const site = {
   ],
 
   contact: {
-    email: `${TODO_PREFIX} e-mail`,
+    email: "vladislava@mentorka.cz",
     phone: `${TODO_PREFIX} telefon`,
     /** Např. „Praha“ nebo „Praha · online“. Prázdné = nezobrazí se. */
     location: "",
@@ -76,6 +76,26 @@ export const site = {
 
   /** Volitelné odkazy na sociální sítě. Prázdné pole = nezobrazí se. */
   social: [] as { label: string; href: string }[],
+
+  /**
+   * Online rezervace termínů přes Google Workspace.
+   *
+   * Jak odkaz získat: Google Kalendář → Vytvořit → „Plánek schůzek“
+   * (Appointment schedule) → nastavit délku, dostupnost a rezervační
+   * formulář → Uložit → tlačítko „Otevřít stránku rezervací“ → zkopírovat
+   * adresu (začíná https://calendar.google.com/calendar/appointments/schedules/).
+   *
+   * Jakmile je odkaz vyplněný, hlavní tlačítka vedou na rezervaci
+   * a v sekci Kontakt se zobrazí vložený rezervační kalendář.
+   * Dokud je TODO, tlačítka otevírají e-mail.
+   *
+   * TODO: DOPLNIT odkaz na plánek schůzek (viz postup výše).
+   */
+  booking: {
+    url: `${TODO_PREFIX} odkaz na rezervační stránku Google Kalendáře`,
+    /** Vložit rezervační kalendář přímo do stránky (iframe). */
+    embed: true,
+  },
 
   /**
    * Rok, kdy Vladislava přišla o manžela. Text „před osmi lety“ se v příběhu
@@ -111,6 +131,44 @@ export type Site = typeof site;
 /** Odkaz pro primární CTA – mailto, pokud je e-mail vyplněný, jinak kotva na kontakt. */
 export const contactHref = (): string =>
   isTodo(site.contact.email) ? "#kontakt" : `mailto:${site.contact.email}`;
+
+/** Ověřená adresa rezervační stránky, nebo null, dokud není vyplněná. */
+export const bookingUrl = (): string | null => {
+  if (isTodo(site.booking.url)) return null;
+  try {
+    const url = new URL(site.booking.url.trim());
+    return url.protocol === "https:" ? url.toString() : null;
+  } catch {
+    return null;
+  }
+};
+
+/**
+ * Zdroj pro vložený rezervační kalendář. Google vyžaduje parametr `gv=true`,
+ * jinak místo formuláře zobrazí plnou stránku kalendáře.
+ */
+export const bookingEmbedSrc = (): string | null => {
+  const raw = bookingUrl();
+  if (!raw || !site.booking.embed) return null;
+  const url = new URL(raw);
+  url.searchParams.set("gv", "true");
+  return url.toString();
+};
+
+/**
+ * Cíl hlavních výzev napříč webem: rezervace, když je nastavená,
+ * jinak e-mail. Externí odkaz se otevírá v novém panelu.
+ */
+export const ctaLinkProps = (): {
+  href: string;
+  target?: "_blank";
+  rel?: "noopener noreferrer";
+} => {
+  const booking = bookingUrl();
+  return booking
+    ? { href: booking, target: "_blank", rel: "noopener noreferrer" }
+    : { href: contactHref() };
+};
 
 export const telHref = (phone: string): string => `tel:${phone.replace(/\s+/g, "")}`;
 

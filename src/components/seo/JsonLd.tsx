@@ -1,7 +1,11 @@
-import { isTodo, site } from "@/config/site";
+import { bookingUrl, isTodo, site } from "@/config/site";
 import { services } from "@/content/services";
 import { certificates } from "@/content/certificates";
-import { HOURLY_RATE_CZK, FIRST_SESSION_HOURS, FIRST_SESSION_PRICE_CZK } from "@/content/pricing";
+import {
+  HOURLY_RATE_CZK,
+  FIRST_SESSION_HOURS,
+  FIRST_SESSION_PRICE_CZK,
+} from "@/content/pricing";
 
 /**
  * Schema.org – Person + WebSite + nabízené služby + ceny.
@@ -9,6 +13,7 @@ import { HOURLY_RATE_CZK, FIRST_SESSION_HOURS, FIRST_SESSION_PRICE_CZK } from "@
  */
 export function JsonLd() {
   const personId = `${site.url}/#person`;
+  const booking = bookingUrl();
 
   const credentialItems = certificates.map((cert) => ({
     "@type": "EducationalOccupationalCredential",
@@ -56,7 +61,8 @@ export function JsonLd() {
     {
       "@type": "Offer",
       name: "První sezení",
-      description: "První setkání probíhá vždy osobně a trvá dvě hodiny.",
+      description:
+        "První setkání probíhá vždy osobně a trvá dvě hodiny. Nabízeno za zvýhodněnou cenu.",
       price: FIRST_SESSION_PRICE_CZK,
       priceCurrency: "CZK",
       availability: "https://schema.org/InStock",
@@ -85,6 +91,22 @@ export function JsonLd() {
     availableLanguage: "cs",
     url: `${site.url}/#${s.id}`,
     offers,
+    ...(booking
+      ? {
+          potentialAction: {
+            "@type": "ReserveAction",
+            target: {
+              "@type": "EntryPoint",
+              urlTemplate: booking,
+              actionPlatform: [
+                "https://schema.org/DesktopWebPlatform",
+                "https://schema.org/MobileWebPlatform",
+              ],
+            },
+            result: { "@type": "Reservation", name: s.title },
+          },
+        }
+      : {}),
   }));
 
   const website = {

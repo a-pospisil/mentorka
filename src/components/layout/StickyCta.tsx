@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { contactHref, CTA_SHORT } from "@/config/site";
+import { ctaLinkProps, CTA_SHORT } from "@/config/site";
 import { Arrow } from "@/components/ui/Arrow";
 import { cn } from "@/lib/utils";
 
@@ -44,7 +44,7 @@ export function StickyCta() {
           visible ? "translate-y-0" : "translate-y-full",
         )}
       >
-        <a href={contactHref()} className="btn btn-primary w-full !py-3.5" tabIndex={visible ? 0 : -1}>
+        <a {...ctaLinkProps()} className="btn btn-primary w-full !py-3.5" tabIndex={visible ? 0 : -1}>
           {CTA_SHORT}
           <Arrow className="h-3 w-3" />
         </a>
