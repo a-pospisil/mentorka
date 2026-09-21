@@ -65,6 +65,8 @@ export const neuralPresets = {
   services: preset({ alpha: 0.5, density: 0.78, violet: 0.3, pulseRate: 0.9, glow: 0.45, biasX: 0.25, biasY: 0.1 }),
   /** Jak to probíhá. */
   process: preset({ alpha: 0.45, density: 0.72, pulseRate: 0.7, glow: 0.4, biasX: -0.3 }),
+  /** Ceník: střídmá, přehledná – jako čistý list. */
+  pricing: preset({ alpha: 0.42, density: 0.7, pulseRate: 0.65, glow: 0.38, biasX: 0.28 }),
   /** Důvěra. */
   trust: preset({ alpha: 0.4, density: 0.68, pulseRate: 0.6, glow: 0.35, biasX: 0.3 }),
   /** Závěr: plně propojená, pomalá, hluboká. */

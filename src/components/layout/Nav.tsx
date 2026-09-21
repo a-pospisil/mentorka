@@ -7,7 +7,8 @@ import { getLenis } from "@/components/providers/SmoothScroll";
 
 /**
  * Světlá, minimalistická navigace: transparentní, při scrollu získá
- * ivory blur pozadí. Na mobilu celoobrazovkové menu.
+ * ivory blur pozadí. Celoobrazovkové menu až do xl – šest položek
+ * se na užším desktopu (1024–1280 px) do jednoho řádku nevejde.
  */
 export function Nav() {
   const [scrolled, setScrolled] = useState(false);
@@ -88,7 +89,7 @@ export function Nav() {
             {site.name}
           </a>
 
-          <ul className="hidden items-center gap-7 lg:flex">
+          <ul className="hidden items-center gap-7 xl:flex">
             {navigation.map((item) => (
               <li key={item.href}>
                 <a
@@ -118,7 +119,7 @@ export function Nav() {
 
           <button
             type="button"
-            className="relative z-[80] flex h-11 w-11 items-center justify-center lg:hidden"
+            className="relative z-[80] flex h-11 w-11 items-center justify-center xl:hidden"
             aria-expanded={open}
             aria-controls="mobile-menu"
             aria-label={open ? "Zavřít menu" : "Otevřít menu"}
@@ -153,7 +154,7 @@ export function Nav() {
         id="mobile-menu"
         aria-hidden={!open}
         className={cn(
-          "fixed inset-0 z-[75] flex flex-col justify-between bg-paper-50/95 px-6 pb-10 pt-28 backdrop-blur-2xl transition-[opacity,visibility] duration-500 lg:hidden",
+          "fixed inset-0 z-[75] flex flex-col justify-between bg-paper-50/95 px-6 pb-10 pt-28 backdrop-blur-2xl transition-[opacity,visibility] duration-500 xl:hidden",
           open ? "visible opacity-100" : "invisible opacity-0",
         )}
       >

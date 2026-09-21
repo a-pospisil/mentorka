@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { isTodo } from "@/config/site";
 import {
   credentials,
@@ -8,8 +9,11 @@ import {
   trustIntro,
   type TrustItem,
 } from "@/content/trust";
+import { certificates, certificatesIntro } from "@/content/certificates";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
+import { Lightbox } from "@/components/ui/Lightbox";
+import { cn } from "@/lib/utils";
 
 const visibleItems = (items: TrustItem[]) =>
   showPlaceholders ? items : items.filter((item) => !isTodo(item.title));
@@ -34,7 +38,7 @@ function TrustLine({ item }: { item: TrustItem }) {
 }
 
 /**
- * 07 DŮVĚRA – vzdělání, certifikace, praxe, reference.
+ * 08 DŮVĚRA – vzdělání, certifikace, praxe, reference a skeny certifikátů.
  * Pouze skutečné informace; chybějící údaje jsou zřetelně označené
  * placeholdery (src/content/trust.ts).
  */
@@ -42,7 +46,10 @@ export function Trust() {
   const creds = visibleItems(credentials);
   const prac = visibleItems(practice);
   const placeholders = showPlaceholders && !testimonials.length ? testimonialPlaceholders : 0;
-  if (!creds.length && !prac.length && !testimonials.length && !placeholders) return null;
+  /** Jediný certifikát dostane širší, editoriální layout (obrázek + údaje vedle sebe). */
+  const single = certificates.length === 1;
+  if (!creds.length && !prac.length && !testimonials.length && !placeholders && !certificates.length)
+    return null;
 
   return (
     <section id="duvera" data-neural="trust" className="relative">
@@ -101,6 +108,67 @@ export function Trust() {
             </Reveal>
           ) : null}
         </div>
+
+        {certificates.length ? (
+          <div className="mt-16 border-t hairline pt-12 lg:mt-24 lg:pt-16">
+            <Reveal className="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-2">
+              <h3 className="t-label text-ink-500">{certificatesIntro.label}</h3>
+              <p className="t-small text-ink-400">{certificatesIntro.note}</p>
+            </Reveal>
+
+            <Reveal
+              stagger={0.12}
+              className={cn(
+                "mt-8 lg:mt-10",
+                single ? "grid gap-8" : "grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8",
+              )}
+            >
+              {certificates.map((cert) => (
+                <figure
+                  key={cert.id}
+                  className={cn(single && "grid items-center gap-8 sm:grid-cols-2 lg:gap-14")}
+                >
+                  <Lightbox
+                    image={cert.image}
+                    alt={cert.alt}
+                    label={`Zvětšit certifikát ${cert.title}`}
+                    caption={`${cert.title} · ${cert.issuer} · ${cert.issued}`}
+                  >
+                    <div className="photo-frame !rounded-[1.25rem] aspect-[1.4/1] w-full">
+                      <Image
+                        src={cert.image}
+                        alt={cert.alt}
+                        fill
+                        sizes={
+                          single
+                            ? "(max-width: 640px) 90vw, 46vw"
+                            : "(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
+                        }
+                        placeholder="blur"
+                        className="object-cover object-top transition-transform duration-[1.2s] ease-[var(--ease-out-expo)] group-hover:scale-[1.03]"
+                      />
+                    </div>
+                  </Lightbox>
+
+                  <figcaption className={cn(!single && "mt-5")}>
+                    <p className="font-serif text-xl leading-snug text-ink-900">{cert.title}</p>
+                    <p className="t-small mt-1.5 text-ink-500">
+                      {cert.issuer} · {cert.year}
+                    </p>
+                    {cert.certifiedBy ? (
+                      <p className="t-small mt-3 text-ink-400">Certifikoval {cert.certifiedBy}</p>
+                    ) : null}
+                    {cert.number ? (
+                      <p className="t-small mt-1 text-ink-400">
+                        Č. {cert.number} · {cert.issued}
+                      </p>
+                    ) : null}
+                  </figcaption>
+                </figure>
+              ))}
+            </Reveal>
+          </div>
+        ) : null}
       </div>
     </section>
   );

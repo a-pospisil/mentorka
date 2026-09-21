@@ -78,11 +78,19 @@ export const site = {
   social: [] as { label: string; href: string }[],
 
   /**
-   * Rok, kdy Vladislava přišla o manžela. Pokud je vyplněný, text
-   * „před osmi lety“ se v příběhu počítá automaticky (viz src/content/story.ts).
-   * TODO: DOPLNIT rok – jinak zůstává pevné „před osmi lety“ ze zadání.
+   * Rok, kdy Vladislava přišla o manžela. Text „před osmi lety“ se v příběhu
+   * dopočítává z tohoto roku (viz src/content/story.ts), takže web nezestárne.
    */
-  lossYear: null as number | null,
+  lossYear: 2018 as number | null,
+
+  /**
+   * Praxe v korporátním prostředí – doba před přechodem k mentoringu.
+   * Propisuje se do sekce Důvěra a do strukturovaných dat.
+   */
+  corporate: {
+    from: 1994,
+    to: 2020,
+  },
 
   /**
    * Bezplatná linka pomoci uvedená u tématu ztráty.
@@ -116,5 +124,6 @@ export const navigation = [
   { label: "Můj příběh", href: "#pribeh" },
   { label: "S čím pomáhám", href: "#pomoc" },
   { label: "Jak to probíhá", href: "#prubeh" },
+  { label: "Ceník", href: "#cenik" },
   { label: "Kontakt", href: "#kontakt" },
 ] as const;

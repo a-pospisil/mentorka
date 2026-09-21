@@ -1,6 +1,6 @@
 import { CTA_PRIMARY } from "@/config/site";
 
-/** 06 JAK TO PROBÍHÁ – tři kroky. */
+/** 06 JAK TO PROBÍHÁ – tři kroky. Ceny a podmínky jsou v src/content/pricing.ts. */
 export const processIntro = {
   label: "Jak to probíhá",
   headline: "Tři kroky. Žádný *závazek*.",
@@ -8,8 +8,16 @@ export const processIntro = {
 
 export const processSteps = [
   { index: "01", title: "Napíšete mi", text: "Krátce popíšete, co řešíte." },
-  { index: "02", title: "Potkáme se", text: "Úvodní nezávazný rozhovor." },
-  { index: "03", title: "Uvidíme, co dál", text: "Pokud si budeme rozumět, domluvíme další postup." },
+  {
+    index: "02",
+    title: "30 minut zdarma",
+    text: "Úvodní nezávazný rozhovor online nebo osobně.",
+  },
+  {
+    index: "03",
+    title: "První sezení osobně",
+    text: "Dvě hodiny naživo. Pak pokračujeme tak, jak vám to dává smysl.",
+  },
 ];
 
 export const processNote =
