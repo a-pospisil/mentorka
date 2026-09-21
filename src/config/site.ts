@@ -12,8 +12,8 @@ export const TODO_PREFIX = "TODO: DOPLNIT";
 export const isTodo = (value?: string | null): boolean =>
   !value || value.trim().toUpperCase().startsWith("TODO");
 
-/** TODO: DOPLNIT finální doménu (nebo nastavte NEXT_PUBLIC_SITE_URL). */
-const FALLBACK_SITE_URL = "https://www.vladislavapospisilova.cz";
+/** Produkční doména. Lze přebít proměnnou NEXT_PUBLIC_SITE_URL. */
+const FALLBACK_SITE_URL = "https://mentorka.eu";
 
 /**
  * Veřejná URL webu pro canonical, Open Graph, sitemap a robots.
@@ -67,7 +67,7 @@ export const site = {
 
   contact: {
     email: "vladislava@mentorka.eu",
-    phone: `${TODO_PREFIX} telefon`,
+    phone: "776 313 594",
     /** Např. „Praha“ nebo „Praha · online“. Prázdné = nezobrazí se. */
     location: "",
     /** Volitelné: IČO, adresa provozovny apod. */
@@ -102,6 +102,12 @@ export const site = {
     } as Record<string, string>,
     /** Který plánek je cílem hlavních tlačítek a vloženého kalendáře. */
     primary: "uvodni-rozhovor",
+    /**
+     * Zobrazit v Kontaktu nápovědu, dokud není vyplněný žádný plánek.
+     * Vypnuto = sekce rezervace se do té doby vůbec nevykreslí.
+     * Jakmile odkazy doplníte, rezervace se zobrazí bez ohledu na tuto volbu.
+     */
+    showPlaceholder: false,
     /** Vložit rezervační kalendář přímo do stránky (iframe). */
     embed: true,
   },
@@ -191,7 +197,21 @@ export const ctaLinkProps = (): {
     : { href: contactHref() };
 };
 
-export const telHref = (phone: string): string => `tel:${phone.replace(/\s+/g, "")}`;
+/** Předvolba doplněná k devítimístnému českému číslu. */
+const CZ_DIAL_CODE = "+420";
+
+/**
+ * Telefon v mezinárodním tvaru pro odkazy a strukturovaná data.
+ * Devítimístné české číslo dostane předvolbu; kratší čísla (linky pomoci
+ * jako 116 123) i čísla s vlastní předvolbou zůstávají beze změny.
+ */
+export const phoneE164 = (phone: string): string => {
+  const digits = phone.replace(/[^\d+]/g, "");
+  if (digits.startsWith("+")) return digits;
+  return digits.length === 9 ? `${CZ_DIAL_CODE}${digits}` : digits;
+};
+
+export const telHref = (phone: string): string => `tel:${phoneE164(phone)}`;
 
 /** Jednotný text primární výzvy napříč webem. */
 export const CTA_PRIMARY = "Domluvit nezávazný rozhovor";

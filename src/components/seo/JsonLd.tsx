@@ -1,4 +1,4 @@
-import { bookingUrl, isTodo, site } from "@/config/site";
+import { bookingUrl, isTodo, phoneE164, site } from "@/config/site";
 import { services } from "@/content/services";
 import { certificates } from "@/content/certificates";
 import {
@@ -43,7 +43,7 @@ export function JsonLd() {
     ],
     ...(credentialItems.length ? { hasCredential: credentialItems } : {}),
     ...(isTodo(site.contact.email) ? {} : { email: `mailto:${site.contact.email}` }),
-    ...(isTodo(site.contact.phone) ? {} : { telephone: site.contact.phone }),
+    ...(isTodo(site.contact.phone) ? {} : { telephone: phoneE164(site.contact.phone) }),
     ...(site.social.length ? { sameAs: site.social.map((s) => s.href) } : {}),
   };
 

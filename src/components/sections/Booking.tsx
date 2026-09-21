@@ -1,4 +1,4 @@
-import { bookingEmbedSrc, bookingUrl, hasAnyBooking } from "@/config/site";
+import { bookingEmbedSrc, bookingUrl, hasAnyBooking, site } from "@/config/site";
 import { booking as bookingContent } from "@/content/contact";
 import { Reveal } from "@/components/ui/Reveal";
 import { MagneticButton } from "@/components/ui/MagneticButton";
@@ -8,7 +8,9 @@ import { Arrow } from "@/components/ui/Arrow";
  * Rezervace termínu přes plánek schůzek Google Workspace.
  * Zobrazí hlavní plánek (site.booking.primary) – vložený kalendář i odkaz.
  * Odkazy na ostatní délky setkání jsou u jednotlivých karet v ceníku.
- * Dokud není vyplněný žádný plánek, zobrazí se návod, kde odkazy vzít.
+ *
+ * Dokud není vyplněný žádný plánek, sekce se nevykreslí vůbec – nebo
+ * zobrazí návod, když je zapnuté site.booking.showPlaceholder.
  */
 export function Booking() {
   const url = bookingUrl();
@@ -16,7 +18,8 @@ export function Booking() {
 
   if (!url) {
     // Placeholder se drží stejného vzoru jako ostatní chybějící údaje.
-    return hasAnyBooking() ? null : (
+    if (hasAnyBooking() || !site.booking.showPlaceholder) return null;
+    return (
       <Reveal className="todo-block mt-14 p-7 lg:mt-20">
         <span className="todo">TODO: DOPLNIT rezervační kalendář</span>
         <p className="t-small mt-4 max-w-[68ch] text-ink-500">
