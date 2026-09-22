@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useRef } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { prefersReducedMotionNow } from "@/lib/hooks";
-import { contactHref } from "@/config/site";
+import { ctaLinkProps } from "@/config/site";
 import { hero } from "@/content/hero";
 import { heroPortrait, photoAlt } from "@/content/photos";
 import { NeuralHalo } from "@/components/neural/NeuralHalo";
@@ -86,7 +86,7 @@ export function Hero() {
           <p className="hero-meta t-label-wide mt-4 text-ink-500 lg:mt-7">{hero.tagline}</p>
           <p className="hero-meta t-lead mt-4 max-w-[32ch] text-ink-700 lg:mt-7">{hero.lead}</p>
           <div className="hero-meta mt-6 flex flex-wrap items-center gap-x-8 gap-y-4 lg:mt-9">
-            <MagneticButton href={contactHref()} className="btn btn-primary">
+            <MagneticButton {...ctaLinkProps()} className="btn btn-primary">
               {hero.primaryCta}
               <Arrow />
             </MagneticButton>

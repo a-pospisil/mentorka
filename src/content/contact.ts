@@ -9,3 +9,13 @@ export const finalCta = {
   disclaimer:
     "Coaching, NLP a mentoring nenahrazují lékařskou péči ani psychoterapii. Pracuji s lidmi, kteří chtějí porozumět svým vzorcům a měnit je.",
 };
+
+/** Rezervace termínu – plánek schůzek Google Workspace (viz site.booking). */
+export const booking = {
+  label: "Rezervace termínu",
+  text: "Vyberte si volný termín přímo v mém kalendáři. Úvodních 30 minut je zdarma.",
+  openLabel: "Otevřít v novém okně",
+  /** Tlačítko na kartě ceníku. */
+  reserveLabel: "Rezervovat termín",
+  iframeTitle: "Rezervace termínu v kalendáři Vladislavy Pospíšilové",
+};

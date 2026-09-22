@@ -4,6 +4,7 @@ import { Story } from "@/components/sections/Story";
 import { Patterns } from "@/components/sections/Patterns";
 import { Services } from "@/components/sections/Services";
 import { Process } from "@/components/sections/Process";
+import { Pricing } from "@/components/sections/Pricing";
 import { Trust } from "@/components/sections/Trust";
 import { FinalCta } from "@/components/sections/FinalCta";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -11,7 +12,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 /**
  * Jedna stránka, jedna cesta:
  * ZASTAVÍ (hero) → POZNÁ SE (situace) → ZAUJME (příběh, vzorce)
- * → ZAČNE DŮVĚŘOVAT (pomoc, průběh, důvěra) → NAPÍŠE (finální CTA).
+ * → ZAČNE DŮVĚŘOVAT (pomoc, průběh, ceník, důvěra) → NAPÍŠE (finální CTA).
  */
 export default function HomePage() {
   return (
@@ -23,6 +24,7 @@ export default function HomePage() {
       <Patterns />
       <Services />
       <Process />
+      <Pricing />
       <Trust />
       <FinalCta />
     </>

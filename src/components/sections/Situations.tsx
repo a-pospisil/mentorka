@@ -1,4 +1,4 @@
-import { contactHref } from "@/config/site";
+import { ctaLinkProps } from "@/config/site";
 import { situations, situationsIntro, situationsOutro } from "@/content/situations";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
@@ -39,7 +39,7 @@ export function Situations() {
 
         <Reveal className="mt-12 flex flex-col items-start gap-8 lg:mt-18 lg:flex-row lg:items-end lg:justify-between">
           <p className="t-lead max-w-[30ch] text-ink-700">{situationsOutro.text}</p>
-          <MagneticButton href={contactHref()} className="btn btn-primary">
+          <MagneticButton {...ctaLinkProps()} className="btn btn-primary">
             {situationsOutro.cta}
             <Arrow />
           </MagneticButton>

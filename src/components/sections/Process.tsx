@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { contactHref } from "@/config/site";
+import { ctaLinkProps } from "@/config/site";
 import { processCta, processIntro, processNote, processSteps } from "@/content/process";
 import { photoAlt, processPortrait } from "@/content/photos";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -46,7 +46,7 @@ export function Process() {
         </div>
 
         <Reveal className="mt-12 lg:mt-16">
-          <MagneticButton href={contactHref()} className="btn btn-primary">
+          <MagneticButton {...ctaLinkProps()} className="btn btn-primary">
             {processCta}
             <Arrow />
           </MagneticButton>

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { contactHref, isTodo, site, telHref } from "@/config/site";
+import { ctaLinkProps, isTodo, site, telHref } from "@/config/site";
 import { finalCta } from "@/content/contact";
 import { contactPortrait, photoAlt } from "@/content/photos";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -8,6 +8,7 @@ import { MagneticButton } from "@/components/ui/MagneticButton";
 import { TodoValue } from "@/components/ui/Todo";
 import { Arrow } from "@/components/ui/Arrow";
 import { NeuralHalo } from "@/components/neural/NeuralHalo";
+import { Booking } from "@/components/sections/Booking";
 
 /**
  * 08 FINÁLNÍ CTA – velmi světlá sekce, velký portrét s neuronovým halo
@@ -26,7 +27,7 @@ export function FinalCta() {
               {finalCta.text}
             </Reveal>
             <Reveal delay={0.2} className="mt-10">
-              <MagneticButton href={contactHref()} className="btn btn-primary">
+              <MagneticButton {...ctaLinkProps()} className="btn btn-primary">
                 {finalCta.cta}
                 <Arrow />
               </MagneticButton>
@@ -120,6 +121,8 @@ export function FinalCta() {
             </div>
           </div>
         </div>
+
+        <Booking />
       </div>
     </section>
   );
