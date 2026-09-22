@@ -29,7 +29,6 @@ export interface Certificate {
 export const certificatesIntro = {
   label: "Certifikáty",
   title: "Doložené vzdělání",
-  note: "Kliknutím certifikát zvětšíte.",
 };
 
 export const certificates: Certificate[] = [

@@ -51,7 +51,10 @@ export const practice: TrustItem[] = [
 /** Reference klientů – zatím prázdné, nic se nevymýšlí. */
 export const testimonials: Testimonial[] = [];
 
-/** Kolik placeholder karet referencí zobrazit, dokud reference nejsou. */
-export const testimonialPlaceholders = 2;
+/**
+ * Kolik placeholder karet referencí zobrazit, dokud reference nejsou.
+ * 0 = sloupec Reference se na webu vůbec nezobrazí.
+ */
+export const testimonialPlaceholders = 0;
 
 export const showPlaceholders = true;
