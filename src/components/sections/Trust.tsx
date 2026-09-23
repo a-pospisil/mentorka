@@ -12,7 +12,6 @@ import {
 import { certificates, certificatesIntro } from "@/content/certificates";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
-import { Lightbox } from "@/components/ui/Lightbox";
 import { cn } from "@/lib/utils";
 
 const visibleItems = (items: TrustItem[]) =>
@@ -48,6 +47,8 @@ export function Trust() {
   const placeholders = showPlaceholders && !testimonials.length ? testimonialPlaceholders : 0;
   /** Jediný certifikát dostane širší, editoriální layout (obrázek + údaje vedle sebe). */
   const single = certificates.length === 1;
+  /** Bez referencí si vzdělání a praxe rozdělí šířku mezi sebe. */
+  const hasTestimonials = Boolean(testimonials.length || placeholders);
   if (!creds.length && !prac.length && !testimonials.length && !placeholders && !certificates.length)
     return null;
 
@@ -58,7 +59,7 @@ export function Trust() {
 
         <div className="mt-12 grid gap-12 lg:mt-18 lg:grid-cols-12 lg:gap-8">
           {creds.length ? (
-            <Reveal className="lg:col-span-4">
+            <Reveal className={hasTestimonials ? "lg:col-span-4" : "lg:col-span-5"}>
               <h3 className="t-label text-ink-500">Vzdělání a certifikace</h3>
               <ul className="mt-6 divide-y hairline border-y hairline">
                 {creds.map((item, i) => (
@@ -71,7 +72,7 @@ export function Trust() {
           ) : null}
 
           {prac.length ? (
-            <Reveal className="lg:col-span-3" delay={0.1}>
+            <Reveal className={hasTestimonials ? "lg:col-span-3" : "lg:col-span-5"} delay={0.1}>
               <h3 className="t-label text-ink-500">Praxe</h3>
               <ul className="mt-6 divide-y hairline border-y hairline">
                 {prac.map((item, i) => (
@@ -111,16 +112,19 @@ export function Trust() {
 
         {certificates.length ? (
           <div className="mt-16 border-t hairline pt-12 lg:mt-24 lg:pt-16">
-            <Reveal className="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-2">
+            <Reveal>
               <h3 className="t-label text-ink-500">{certificatesIntro.label}</h3>
-              <p className="t-small text-ink-400">{certificatesIntro.note}</p>
             </Reveal>
 
             <Reveal
               stagger={0.12}
               className={cn(
-                "mt-8 lg:mt-10",
-                single ? "grid gap-8" : "grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8",
+                "mt-8 grid lg:mt-10",
+                single
+                  ? "gap-8"
+                  : certificates.length === 2
+                    ? "gap-x-8 gap-y-12 sm:grid-cols-2 lg:gap-x-12"
+                    : "gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8",
               )}
             >
               {certificates.map((cert) => (
@@ -128,35 +132,32 @@ export function Trust() {
                   key={cert.id}
                   className={cn(single && "grid items-center gap-8 sm:grid-cols-2 lg:gap-14")}
                 >
-                  <Lightbox
-                    image={cert.image}
-                    alt={cert.alt}
-                    label={`Zvětšit certifikát ${cert.title}`}
-                    caption={`${cert.title} · ${cert.issuer} · ${cert.issued}`}
-                  >
-                    <div className="photo-frame !rounded-[1.25rem] aspect-[1.4/1] w-full">
-                      <Image
-                        src={cert.image}
-                        alt={cert.alt}
-                        fill
-                        sizes={
-                          single
-                            ? "(max-width: 640px) 90vw, 46vw"
-                            : "(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
-                        }
-                        placeholder="blur"
-                        className="object-cover object-top transition-transform duration-[1.2s] ease-[var(--ease-out-expo)] group-hover:scale-[1.03]"
-                      />
-                    </div>
-                  </Lightbox>
+                  <div className="photo-frame !rounded-[1.25rem] aspect-[1.4/1] w-full">
+                    <Image
+                      src={cert.image}
+                      alt={cert.alt}
+                      fill
+                      sizes={
+                        single || certificates.length === 2
+                          ? "(max-width: 640px) 90vw, 46vw"
+                          : "(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
+                      }
+                      placeholder="blur"
+                      className="object-cover object-top"
+                    />
+                  </div>
 
                   <figcaption className={cn(!single && "mt-5")}>
                     <p className="font-serif text-xl leading-snug text-ink-900">{cert.title}</p>
                     <p className="t-small mt-1.5 text-ink-500">
                       {cert.issuer} · {cert.year}
                     </p>
+                    {cert.scope ? <p className="t-small mt-3 text-ink-600">{cert.scope}</p> : null}
+                    {cert.accreditation ? (
+                      <p className="t-small mt-1 text-ink-600">{cert.accreditation.text}</p>
+                    ) : null}
                     {cert.certifiedBy ? (
-                      <p className="t-small mt-3 text-ink-400">Certifikoval {cert.certifiedBy}</p>
+                      <p className="t-small mt-1 text-ink-400">Certifikoval {cert.certifiedBy}</p>
                     ) : null}
                     {cert.number ? (
                       <p className="t-small mt-1 text-ink-400">

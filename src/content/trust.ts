@@ -28,6 +28,10 @@ export const trustIntro = {
 /** Vzdělání, výcviky a certifikace – doložené dokumentem (viz certificates.ts). */
 export const credentials: TrustItem[] = [
   {
+    title: "Životní kouč",
+    meta: "2025 · Radek Karban Coaching University · 120 hodin · akreditace MŠMT",
+  },
+  {
     title: "NLP Premiere Practitioner",
     meta: "2025 · Radek Karban Coaching University · ITCA NLP",
   },
@@ -51,7 +55,10 @@ export const practice: TrustItem[] = [
 /** Reference klientů – zatím prázdné, nic se nevymýšlí. */
 export const testimonials: Testimonial[] = [];
 
-/** Kolik placeholder karet referencí zobrazit, dokud reference nejsou. */
-export const testimonialPlaceholders = 2;
+/**
+ * Kolik placeholder karet referencí zobrazit, dokud reference nejsou.
+ * 0 = sloupec Reference se na webu vůbec nezobrazí.
+ */
+export const testimonialPlaceholders = 0;
 
 export const showPlaceholders = true;
