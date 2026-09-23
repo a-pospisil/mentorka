@@ -28,6 +28,10 @@ export const trustIntro = {
 /** Vzdělání, výcviky a certifikace – doložené dokumentem (viz certificates.ts). */
 export const credentials: TrustItem[] = [
   {
+    title: "Životní kouč",
+    meta: "2025 · Radek Karban Coaching University · 120 hodin · akreditace MŠMT",
+  },
+  {
     title: "NLP Premiere Practitioner",
     meta: "2025 · Radek Karban Coaching University · ITCA NLP",
   },

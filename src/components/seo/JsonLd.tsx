@@ -20,7 +20,12 @@ export function JsonLd() {
     "@id": `${site.url}/#cert-${cert.id}`,
     name: cert.title,
     credentialCategory: "certificate",
-    recognizedBy: { "@type": "Organization", name: cert.issuer },
+    recognizedBy: [
+      { "@type": "Organization", name: cert.issuer },
+      ...(cert.accreditation
+        ? [{ "@type": "GovernmentOrganization", name: cert.accreditation.body }]
+        : []),
+    ],
     ...(cert.number ? { identifier: cert.number } : {}),
   }));
 

@@ -119,8 +119,12 @@ export function Trust() {
             <Reveal
               stagger={0.12}
               className={cn(
-                "mt-8 lg:mt-10",
-                single ? "grid gap-8" : "grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8",
+                "mt-8 grid lg:mt-10",
+                single
+                  ? "gap-8"
+                  : certificates.length === 2
+                    ? "gap-x-8 gap-y-12 sm:grid-cols-2 lg:gap-x-12"
+                    : "gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8",
               )}
             >
               {certificates.map((cert) => (
@@ -134,7 +138,7 @@ export function Trust() {
                       alt={cert.alt}
                       fill
                       sizes={
-                        single
+                        single || certificates.length === 2
                           ? "(max-width: 640px) 90vw, 46vw"
                           : "(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
                       }
@@ -148,8 +152,12 @@ export function Trust() {
                     <p className="t-small mt-1.5 text-ink-500">
                       {cert.issuer} · {cert.year}
                     </p>
+                    {cert.scope ? <p className="t-small mt-3 text-ink-600">{cert.scope}</p> : null}
+                    {cert.accreditation ? (
+                      <p className="t-small mt-1 text-ink-600">{cert.accreditation.text}</p>
+                    ) : null}
                     {cert.certifiedBy ? (
-                      <p className="t-small mt-3 text-ink-400">Certifikoval {cert.certifiedBy}</p>
+                      <p className="t-small mt-1 text-ink-400">Certifikoval {cert.certifiedBy}</p>
                     ) : null}
                     {cert.number ? (
                       <p className="t-small mt-1 text-ink-400">
